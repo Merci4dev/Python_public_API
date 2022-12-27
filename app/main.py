@@ -4,6 +4,9 @@ from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
 from random import randrange
+import psycopg2
+from psycopg2.extras import RealDictCursor 
+import time
 
 # Fastapi instantiation
 app = FastAPI()
@@ -15,6 +18,22 @@ class Post(BaseModel):
     published: bool = True
     # Adding Optional values to the model
     rating: Optional[int] = None
+
+# Handel the database connection
+while True:
+    try:
+        conn = psycopg2.connect(host="hostName",database="dbName", user="unerName", password="password", cursor_factory=RealDictCursor)
+        cursor = conn.cursor()
+        print("DB is connectd succesfully (·_·) ···")
+        break
+
+    # If there is an error on the connection
+    except Exception as error:
+        print("Connection to DB failed")
+        print("Error: ", error)
+
+        #If the connection fails every 2 it will try to reconnect again
+        time.sleep(2)
 
 
 # Variable to save posts statically in memory
