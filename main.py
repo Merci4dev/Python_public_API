@@ -113,3 +113,24 @@ def delete_post(id: int):
     my_posts.pop(index)
     # when we delete a post it will not send any data back
     return Response( status_code = status.HTTP_404_NOT_FOUND)
+
+
+# Handler Update Function
+@app.put("/posts/{id}")
+def update_post(id: int, post: Post):
+    # print(post)  
+    # check for the post index
+    index = find_index_post(id)
+
+    # varlidation to check if the post do not exists
+    if index == None:
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = f"Post with id [{id}] do not exists")
+
+    # if th post exists conver the data that we recive fron the client to a dict
+    post_dict = post.dict()
+    # insert the found id into the dict
+    post_dict["id"] = id
+    # we pass the to new dict to the variable my_post
+    my_posts[index] = post_dict
+
+    return {"data": post_dict }
