@@ -1,5 +1,6 @@
 # Modules import
-from fastapi import Body, FastAPI
+from fastapi import FastAPI, Response, status, HTTPException
+from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
 from random import randrange
@@ -31,6 +32,10 @@ my_posts = [
 ]
 
 # function to find a post by its id
+def find_post(id):
+    for p in my_posts:
+        if p["id"] == id:
+            return p
 
 # function that finds the index of a post
     
@@ -50,8 +55,8 @@ def get_posts():
 
 
 # Post request to create the posts
-# The data willbe send throw the requeste boby
-@app.post("/posts")
+# Changin the defult stutus code for the raquest
+@app.post("/posts", status_code = status.HTTP_201_CREATED)
 def create_posts(post: Post):
 
     # convertin the pydendic model into a dict
@@ -64,3 +69,27 @@ def create_posts(post: Post):
     my_posts.append(post_dict)
 
     return {"data": post_dict}
+
+
+# Retrieving information from an individual post 
+# THe paht {id} return a string. It must be convert into an integer
+# fastapi use (int) to validate tha the id is an integer
+@app.get("/posts/{id}")
+def get_post(id: int, response: Response):
+    print(type(id))
+
+    # search for an id and convert is in an ingeger
+    post = find_post(int(id))
+    print(type(id))
+
+    # Adding validation status code response
+    if not post:
+        ## 2 Sending http status code response back with the HTTPException modules
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f"Post with id [{id}] not found")
+
+
+        ## 1 Sending http status code response back with the status modules
+        # response.status_code = status.HTTP_404_NOT_FOUND
+        # return {"message": f"Post with id [{id}] not found"}
+
+    return {"post_details": post}
