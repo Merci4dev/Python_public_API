@@ -100,6 +100,14 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/ Delete Post",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	]
 }
