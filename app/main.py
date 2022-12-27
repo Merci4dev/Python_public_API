@@ -2,13 +2,14 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from pydantic import BaseModel
+
 from typing import Optional, List
 from random import randrange
 import psycopg2
 from psycopg2.extras import RealDictCursor 
 import time
 from sqlalchemy.orm import Session
-from . import models,schemas
+from . import models,schemas, utils
 from . database import engine,  get_db
 
 
@@ -122,3 +123,20 @@ def update_post(id: str, updated_post: schemas.PostCreate, db: Session = Depends
     db.commit()
     #to return the updated post
     return post_query.first()
+
+
+
+#  Handler User creation Function
+@app.post("/users", status_code=status.HTTP_201_CREATED,response_model=schemas.UserOuth)
+def create_user( user: schemas.UserCreate, db: Session = Depends(get_db)):
+
+    # Before creating a user we create the encrypted passwd that will be stored in the DB
+    hashed_passwd = utils.pwd_hash(user.password)
+    user.password = hashed_passwd
+
+    new_user = models.Users(**user.dict())
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    
+    return new_user

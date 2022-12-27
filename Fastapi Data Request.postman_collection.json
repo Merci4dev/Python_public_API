@@ -53,7 +53,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/posts/a930bed3-2405-4920-bcfb-0216dfb38ef5",
+					"raw": "http://127.0.0.1:8000/posts/a8eaec31-ee3c-476d-bcf8-c70011d58e3b",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -64,7 +64,7 @@
 					"port": "8000",
 					"path": [
 						"posts",
-						"a930bed3-2405-4920-bcfb-0216dfb38ef5"
+						"a8eaec31-ee3c-476d-bcf8-c70011d58e3b"
 					]
 				}
 			},
@@ -77,7 +77,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Post Tow\",\n    \"content\": \"My python Api demo Posts\"\n}",
+					"raw": "{\n    \"title\": \"Post One\",\n    \"content\": \"My python Api demo Posts\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

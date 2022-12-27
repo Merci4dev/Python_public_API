@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
 # Defining a basic model for the posts. throw this mode we make the validation for the data we want to recive from the users
@@ -18,5 +18,20 @@ class Post(PostBase):
     created_at : datetime
 
     # Convierte el sqlalchemy model en python dict
+    class Config:
+        orm_mode = True
+
+
+# USER SECTION
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+   
+
+# Defining which data we send back to the user. With this we prevent the password from being returned
+class UserOuth(BaseModel):
+    email: EmailStr
+    created_at : datetime
+
     class Config:
         orm_mode = True
