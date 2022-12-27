@@ -19,50 +19,22 @@ class Post(BaseModel):
     # Adding Optional values to the model
     rating: Optional[int] = None
 
-# Handel the database connection
+# Handel the database connection hard coded
 while True:
     try:
-        conn = psycopg2.connect(host="hostName",database="dbName", user="unerName", password="password", cursor_factory=RealDictCursor)
-        cursor = conn.cursor()
+        conn = psycopg2.connect(host="localhost",database="fastapi_prod", user="merci4dev", password="elnobato007", cursor_factory=RealDictCursor)
+        cur = conn.cursor()
         print("DB is connectd succesfully (·_·) ···")
         break
 
     # If there is an error on the connection
     except Exception as error:
         print("Connection to DB failed")
-        print("Error: ", error)
+        print("Error:", error)
 
         #If the connection fails every 2 it will try to reconnect again
         time.sleep(2)
-
-
-# Variable to save posts statically in memory
-my_posts = [
-    { 
-    "title": "Post title No1", "content": "Post content No1", "id": 1,
-  },
-    { 
-    "title": "Post title No2", "content": "Post content No2", "id": 2,
-  },
-    { 
-    "title": "Post title No3", "content": "Post content No3", "id": 3,
-  },
-
-]
-
-# function to find a post by its id
-def find_post(id):
-    for p in my_posts:
-        if p["id"] == id:
-            return p
-
-# Function which manage the logig to finds the index of an especific id into the dict 
-def find_index_post(id):
-    for i, p, in enumerate(my_posts):
-        if p["id"] == id:
-            return i
-        print(i)
-    
+ 
 
 # Path to the api home
 @app.get("/")
@@ -73,9 +45,13 @@ async def root():
 # Path to get all Post stored in my_post variable
 @app.get("/posts")
 def get_posts():
-    
-    # when we pass them an array, fastapi will serialize this array into the json format
-   return {"data": my_posts}
+     
+    # Retrieving all the post fon the database
+    cur.execute("""SELECT * FROM posts""")
+    posts = cur.fetchall()
+    print(posts)
+
+    return {"data": posts}
 
 
 # Post request to create the posts
@@ -83,73 +59,63 @@ def get_posts():
 @app.post("/posts", status_code = status.HTTP_201_CREATED)
 def create_posts(post: Post):
 
-    # convertin the pydendic model into a dict
-    post_dict= post.dict()
+    # Quety to create a post
+    # To avoid sql injection we use the parametizer (%s)
+    cur.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, 
+    %s) RETURNING * """, (post.title, post.content, post.published),)
 
-    # adding a random id to aech post
-    post_dict["id"] = randrange(100000, 1000000)
-   
-    # Insert into the the array the new created post
-    my_posts.append(post_dict)
-
-    return {"data": post_dict}
+    post = cur.fetchone()
+    conn.commit()
+    return {"data": post}
 
 
 # Retrieving information from an individual post 
 # THe paht {id} return a string. It must be convert into an integer
 # fastapi use (int) to validate tha the id is an integer
 @app.get("/posts/{id}")
-def get_post(id: int, response: Response):
-    print(type(id))
+def get_post(id: str, response: Response):
+ 
+    cur.execute(""" SELECT * from posts WHERE id = %s """, (str(id),))
 
-    # search for an id and convert is in an ingeger
-    post = find_post(int(id))
-    print(type(id))
-
+    one_post = cur.fetchone()
+    print(one_post)
     # Adding validation status code response
-    if not post:
+    if one_post == None:
         ## 2 Sending http status code response back with the HTTPException modules
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f"Post with id [{id}] not found")
 
-
-        ## 1 Sending http status code response back with the status modules
-        # response.status_code = status.HTTP_404_NOT_FOUND
-        # return {"message": f"Post with id [{id}] not found"}
-
-    return {"post_details": post}
+    return {"post_details": one_post}
 
 
 
 # Handler Delete Function
 @app.delete("/posts/{id}", status_code = status.HTTP_404_NOT_FOUND)
-def delete_post(id: int):
-    index = find_index_post(id)
+def delete_post(id: str):
+
+    cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""", (str(id),))
+
+    deleted_post = cur.fetchone()
+    conn.commit()
 
     # Validation to avoid an error when we want delete a post which do not exists
-    if index == None:
+    if deleted_post == None:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = f"Post with id [{id}] do not exists")
 
-    my_posts.pop(index)
     # when we delete a post it will not send any data back
     return Response( status_code = status.HTTP_404_NOT_FOUND)
 
 
 # Handler Update Function
 @app.put("/posts/{id}")
-def update_post(id: int, post: Post):
-    # print(post)  
-    # check for the post index
-    index = find_index_post(id)
+def update_post(id: str, post: Post):
+    
+    cur.execute("""UPDATE posts SET title = %s, content = %s,  published = %s WHERE id = %s RETURNING *""", (post.title, post.content, post.published, str(id),))
 
+    updated_post = cur.fetchone()
+    conn.commit()
     # varlidation to check if the post do not exists
-    if index == None:
-        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = f"Post with id [{id}] do not exists")
+    if updated_post == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {[id]} do not exist")
 
-    # if th post exists conver the data that we recive fron the client to a dict
-    post_dict = post.dict()
-    # insert the found id into the dict
-    post_dict["id"] = id
-    # we pass the to new dict to the variable my_post
-    my_posts[index] = post_dict
-
-    return {"data": post_dict }
+   
+    return {"data": updated_post}
