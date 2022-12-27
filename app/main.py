@@ -2,13 +2,13 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from random import randrange
 import psycopg2
 from psycopg2.extras import RealDictCursor 
 import time
 from sqlalchemy.orm import Session
-from . import models
+from . import models,schemas
 from . database import engine,  get_db
 
 
@@ -19,18 +19,11 @@ models.Base.metadata.create_all(bind=engine)
 # Fastapi instantiation
 app = FastAPI()
 
-# Defining a basic model for the posts. throw this mode we make the validation for the data we want to recive
-class Post(BaseModel):
-    title: str
-    content: str
-    published: bool = True
-    # Adding Optional values to the model
-    # rating: Optional[int] = None
 
 # Handel the database connection hard coded
 while True:
     try:
-        conn = psycopg2.connect(host="hostName",database="dbName", user="userName", password="pass", cursor_factory=RealDictCursor)
+        conn = psycopg2.connect(host="hostName",database="dbName", user="userName", password="password", cursor_factory=RealDictCursor)
         cur = conn.cursor()
         print("DB is connectd succesfully (·_·) ···")
         break
@@ -51,17 +44,19 @@ async def root():
 
 
 # Path to get all Post stored in my_post variable
-@app.get("/posts")
+# When making a request to all posts we return a list of posts
+@app.get("/posts", response_model=List[schemas.Post] )
 def get_posts(db: Session = Depends(get_db)):
 
     # Retrieving all the post fon the databas thew ORM
     posts = db.query(models.Post).all()     
-    return {"data": posts}
+    return posts
 
 
 # Post request to create the posts
-@app.post("/posts", status_code = status.HTTP_201_CREATED)
-def create_posts(post: Post, db: Session = Depends(get_db)):
+# response_model=schemas.Post (defines the data that we will return to the user when making a request)
+@app.post("/posts", status_code = status.HTTP_201_CREATED, response_model=schemas.Post)
+def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db)):
 
     # Quety to create a post
     # If the model is not to big we can use  this query to create nuw post
@@ -75,13 +70,11 @@ def create_posts(post: Post, db: Session = Depends(get_db)):
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
-
     return  new_post
 
 
-
 # Retrieving information from an individual post 
-@app.get("/posts/{id}")
+@app.get("/posts/{id}", response_model=schemas.Post)
 def  get_post(id: str, db: Session = Depends(get_db)):
 
     # Retrieving all the post fon the databas thew ORM
@@ -92,9 +85,7 @@ def  get_post(id: str, db: Session = Depends(get_db)):
    
         # forma dos
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail=f"Post with id: {[id]} was not found!")
-
-    return {"Post details": post}
-
+    return  post
 
 
 # Handler Delete Function
@@ -110,14 +101,12 @@ def delete_post(id: str, db: Session = Depends(get_db)):
     # But if the post exists
     post.delete(synchronize_session=False)
     db.commit()
-
     return Response(status_code=status.HTTP_404_NOT_FOUND)
    
 
-
 # Handler Update Function
-@app.put("/posts/{id}")
-def update_post(id: str, updated_post: Post, db: Session = Depends(get_db)):
+@app.put("/posts/{id}", response_model=schemas.Post)
+def update_post(id: str, updated_post: schemas.PostCreate, db: Session = Depends(get_db)):
     
     post_query = db.query(models.Post).filter(models.Post.id == id)
 
@@ -131,6 +120,5 @@ def update_post(id: str, updated_post: Post, db: Session = Depends(get_db)):
     post_query.update(updated_post.dict(), synchronize_session=False)
 
     db.commit()
-
     #to return the updated post
-    return {"data": post_query.first()}
+    return post_query.first()
