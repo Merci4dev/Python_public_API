@@ -25,12 +25,12 @@ class Post(BaseModel):
     content: str
     published: bool = True
     # Adding Optional values to the model
-    rating: Optional[int] = None
+    # rating: Optional[int] = None
 
 # Handel the database connection hard coded
 while True:
     try:
-        conn = psycopg2.connect(host="hostName",database="databaseName", user="userName", password="password", cursor_factory=RealDictCursor)
+        conn = psycopg2.connect(host="hostName",database="dbName", user="userName", password="pass", cursor_factory=RealDictCursor)
         cur = conn.cursor()
         print("DB is connectd succesfully (·_·) ···")
         break
@@ -52,76 +52,85 @@ async def root():
 
 # Path to get all Post stored in my_post variable
 @app.get("/posts")
-def get_posts():
-     
-    # Retrieving all the post fon the database
-    cur.execute("""SELECT * FROM posts""")
-    posts = cur.fetchall()
-    print(posts)
+def get_posts(db: Session = Depends(get_db)):
 
+    # Retrieving all the post fon the databas thew ORM
+    posts = db.query(models.Post).all()     
     return {"data": posts}
 
 
 # Post request to create the posts
-# Changin the defult stutus code for the raquest
 @app.post("/posts", status_code = status.HTTP_201_CREATED)
-def create_posts(post: Post):
+def create_posts(post: Post, db: Session = Depends(get_db)):
 
     # Quety to create a post
-    # To avoid sql injection we use the parametizer (%s)
-    cur.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, 
-    %s) RETURNING * """, (post.title, post.content, post.published),)
+    # If the model is not to big we can use  this query to create nuw post
+    # print(post.dict())
+    new_post = models.Post(
+        title=post.title, content=post.content, published=post.published)
+     
+    # If the model have many field we can use  this query to create nuw post
+    new_post = models.Post(**post.dict())
 
-    post = cur.fetchone()
-    conn.commit()
-    return {"data": post}
+    db.add(new_post)
+    db.commit()
+    db.refresh(new_post)
+
+    return  new_post
+
 
 
 # Retrieving information from an individual post 
-# THe paht {id} return a string. It must be convert into an integer
-# fastapi use (int) to validate tha the id is an integer
 @app.get("/posts/{id}")
-def get_post(id: str, response: Response):
-    cur.execute(""" SELECT * from posts WHERE id = %s """, (str(id),))
+def  get_post(id: str, db: Session = Depends(get_db)):
 
-    one_post = cur.fetchone()
-    # print(one_post)
+    # Retrieving all the post fon the databas thew ORM
+    post = db.query(models.Post).filter(models.Post.id == id).first()
+
     # Adding validation status code response
-    if one_post == None:
-        ## 2 Sending http status code response back with the HTTPException modules
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f"Post with id [{id}] not found")
+    if not post:
+   
+        # forma dos
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail=f"Post with id: {[id]} was not found!")
 
-    return {"post_details": one_post}
+    return {"Post details": post}
+
 
 
 # Handler Delete Function
 @app.delete("/posts/{id}", status_code = status.HTTP_404_NOT_FOUND)
-def delete_post(id: str):
+def delete_post(id: str, db: Session = Depends(get_db)):
 
-    cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""", (str(id),))
+    post = db.query(models.Post).filter(models.Post.id == id)
 
-    deleted_post = cur.fetchone()
-    conn.commit()
+    # Validation if the id to be deleted does not exist
+    if post.first() == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {[id]} do not exist")
 
-    # Validation to avoid an error when we want delete a post which do not exists
-    if deleted_post == None:
-        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = f"Post with id [{id}] do not exists")
+    # But if the post exists
+    post.delete(synchronize_session=False)
+    db.commit()
 
-    # when we delete a post it will not send any data back
-    return Response( status_code = status.HTTP_404_NOT_FOUND)
+    return Response(status_code=status.HTTP_404_NOT_FOUND)
+   
 
 
 # Handler Update Function
 @app.put("/posts/{id}")
-def update_post(id: str, post: Post):
+def update_post(id: str, updated_post: Post, db: Session = Depends(get_db)):
     
-    cur.execute("""UPDATE posts SET title = %s, content = %s,  published = %s WHERE id = %s RETURNING *""", (post.title, post.content, post.published, str(id),))
+    post_query = db.query(models.Post).filter(models.Post.id == id)
 
-    updated_post = cur.fetchone()
-    conn.commit()
-    # varlidation to check if the post do not exists
-    if updated_post == None:
+    post = post_query.first()
+
+    # Validation if the id to be deleted does not exist
+    if post == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {[id]} do not exist")
 
-   
-    return {"data": updated_post}
+    # But if the post exists, we pass the post schema to update it
+    post_query.update(updated_post.dict(), synchronize_session=False)
+
+    db.commit()
+
+    #to return the updated post
+    return {"data": post_query.first()}

@@ -53,7 +53,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/4ecc41a9-8da6-4e72-8f15-46e7fbec9c7343",
+					"raw": "http://127.0.0.1:8000/posts/a930bed3-2405-4920-bcfb-0216dfb38ef5",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -63,7 +63,8 @@
 					],
 					"port": "8000",
 					"path": [
-						"4ecc41a9-8da6-4e72-8f15-46e7fbec9c7343"
+						"posts",
+						"a930bed3-2405-4920-bcfb-0216dfb38ef5"
 					]
 				}
 			},
@@ -76,7 +77,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Demo post ones\",\n    \"content\": \"My python demo post one\",\n     \"published\" : false\n   \n    \n}",
+					"raw": "{\n    \"title\": \"Post Tow\",\n    \"content\": \"My python Api demo Posts\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -106,7 +107,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/posts/4050f4ca-7fa9-448b-a917-cf141e469033",
+					"raw": "http://127.0.0.1:8000/posts/a930bed3-2405-4920-bcfb-0216dfb38ef9",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -117,7 +118,7 @@
 					"port": "8000",
 					"path": [
 						"posts",
-						"4050f4ca-7fa9-448b-a917-cf141e469033"
+						"a930bed3-2405-4920-bcfb-0216dfb38ef9"
 					]
 				}
 			},
@@ -130,7 +131,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \n    \"title\":\"Developer Update SECOND\",\n    \"content\":\"Developing my public API\"\n\n}\n",
+					"raw": "{\n    \n    \"title\":\"Developer Update \",\n    \"content\":\"Developing my public API\"\n\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -138,7 +139,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/posts/96aec8d0-5de9-4b7b-9c2b-1f780fea4c31",
+					"raw": "http://127.0.0.1:8000/posts/a8eaec31-ee3c-476d-bcf8-c70011d58e3b",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -149,7 +150,7 @@
 					"port": "8000",
 					"path": [
 						"posts",
-						"96aec8d0-5de9-4b7b-9c2b-1f780fea4c31"
+						"a8eaec31-ee3c-476d-bcf8-c70011d58e3b"
 					]
 				}
 			},
