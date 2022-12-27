@@ -11,6 +11,15 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"demo1@gmail.com\",\n    \"password\":\"demo1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://127.0.0.1:8000/users",
 					"protocol": "http",
@@ -23,6 +32,29 @@
 					"port": "8000",
 					"path": [
 						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/ Get  User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/d0614281-79b4-4b28-8131-e1e79675929e",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"d0614281-79b4-4b28-8131-e1e79675929e"
 					]
 				}
 			},

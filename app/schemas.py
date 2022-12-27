@@ -30,6 +30,7 @@ class UserCreate(BaseModel):
 
 # Defining which data we send back to the user. With this we prevent the password from being returned
 class UserOuth(BaseModel):
+    id: int
     email: EmailStr
     created_at : datetime
 
