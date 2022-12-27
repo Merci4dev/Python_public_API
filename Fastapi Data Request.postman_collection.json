@@ -54,7 +54,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\":\"Developer\",\n    \"content\":\"Developing my public API\"\n}",
+					"raw": "{\n    \"title\":\"Developer\",\n    \"content\":\"Developing my public API\",\n    \"published\": false,\n    \"rating\": 4\n}",
 					"options": {
 						"raw": {
 							"language": "json"
