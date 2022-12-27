@@ -1,5 +1,5 @@
 # Modules import
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
@@ -7,6 +7,14 @@ from random import randrange
 import psycopg2
 from psycopg2.extras import RealDictCursor 
 import time
+from sqlalchemy.orm import Session
+from . import models
+from . database import engine,  get_db
+
+
+# this line crate the table whe we run the code
+models.Base.metadata.create_all(bind=engine)
+
 
 # Fastapi instantiation
 app = FastAPI()
@@ -22,7 +30,7 @@ class Post(BaseModel):
 # Handel the database connection hard coded
 while True:
     try:
-        conn = psycopg2.connect(host="localhost",database="fastapi_prod", user="merci4dev", password="elnobato007", cursor_factory=RealDictCursor)
+        conn = psycopg2.connect(host="hostName",database="databaseName", user="userName", password="password", cursor_factory=RealDictCursor)
         cur = conn.cursor()
         print("DB is connectd succesfully (·_·) ···")
         break
@@ -34,7 +42,7 @@ while True:
 
         #If the connection fails every 2 it will try to reconnect again
         time.sleep(2)
- 
+
 
 # Path to the api home
 @app.get("/")
@@ -74,18 +82,16 @@ def create_posts(post: Post):
 # fastapi use (int) to validate tha the id is an integer
 @app.get("/posts/{id}")
 def get_post(id: str, response: Response):
- 
     cur.execute(""" SELECT * from posts WHERE id = %s """, (str(id),))
 
     one_post = cur.fetchone()
-    print(one_post)
+    # print(one_post)
     # Adding validation status code response
     if one_post == None:
         ## 2 Sending http status code response back with the HTTPException modules
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f"Post with id [{id}] not found")
 
     return {"post_details": one_post}
-
 
 
 # Handler Delete Function
