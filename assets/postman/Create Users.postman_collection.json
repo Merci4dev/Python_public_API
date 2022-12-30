@@ -1,0 +1,50 @@
+{
+	"info": {
+		"_postman_id": "39bbadb5-78bd-421b-b719-113dee93da9c",
+		"name": "Create Users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24712241"
+	},
+	"item": [
+		{
+			"name": "/ Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"demo1@gmail.com\",\n    \"password\":\"demo1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}users",
+					"host": [
+						"{{URL}}users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/ Get  User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}users/a2275529-101f-4bc0-9e43-d100fd725413",
+					"host": [
+						"{{URL}}users"
+					],
+					"path": [
+						"a2275529-101f-4bc0-9e43-d100fd725413"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
