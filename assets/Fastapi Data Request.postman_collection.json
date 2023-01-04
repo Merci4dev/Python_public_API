@@ -22,6 +22,9 @@
 		},
 		{
 			"name": "/ Get All  Posts",
+			"protocolProfileBehavior": {
+				"followAuthorizationHeader": true
+			},
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -34,13 +37,7 @@
 					]
 				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoiZGVtbzFAZ21haWwuY29tIiwiZXhwIjoxNjcyMzA3NzQ1fQ.A0erHT172O-iuM4QgnXRET5sqIQ5dzWhtzhQP8pMnRs",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "{{URL}}posts",
 					"host": [
@@ -61,7 +58,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{URL}}",
+							"value": "{{JWT}}",
 							"type": "string"
 						}
 					]
@@ -80,12 +77,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{URL}}posts/4e68784b-14f8-411a-82a6-87fa0ea3e58a",
+					"raw": "{{URL}}posts/d15ed4ff-dcc5-4312-9ac1-663cb365ccc6",
 					"host": [
 						"{{URL}}posts"
 					],
 					"path": [
-						"4e68784b-14f8-411a-82a6-87fa0ea3e58a"
+						"d15ed4ff-dcc5-4312-9ac1-663cb365ccc6"
 					]
 				}
 			},
@@ -108,13 +105,14 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDY4OWNjZTctNTQxMy00Y2I4LWE4NWQtZTU2N2M4NTA3NGI4IiwiZXhwIjoxNjcyMzkzNDQ5fQ.zfiF1TvXXuga9mowfdSneow-ap7n7q6AQUh2_fjuUxA",
-						"type": "text"
+						"value": "",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Post Six\",\n    \"content\": \"My python Api demo Posts\"\n}",
+					"raw": "{\n    \"title\": \"Post One\",\n    \"content\": \"My python Api demo Posts\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

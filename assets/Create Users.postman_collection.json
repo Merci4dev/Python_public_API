@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\":\"demo1@gmail.com\",\n    \"password\":\"demo1\"\n}",
+					"raw": "{\n    \"email\":\"demo2@gmail.com\",\n    \"password\":\"demo2\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,17 +21,9 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/users",
-					"protocol": "http",
+					"raw": "{{URL}}users",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"users"
+						"{{URL}}users"
 					]
 				}
 			},
@@ -40,21 +32,25 @@
 		{
 			"name": "/ Get  User",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/users/d0614281-79b4-4b28-8131-e1e79675929e",
-					"protocol": "http",
+					"raw": "{{URL}}users/a5d42434-5e73-4c4f-9c52-1c4b2605dc23",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"{{URL}}users"
 					],
-					"port": "8000",
 					"path": [
-						"users",
-						"d0614281-79b4-4b28-8131-e1e79675929e"
+						"a5d42434-5e73-4c4f-9c52-1c4b2605dc23"
 					]
 				}
 			},

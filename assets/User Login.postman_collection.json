@@ -7,13 +7,13 @@
 	},
 	"item": [
 		{
-			"name": "/ Login 1",
+			"name": "/ Login1",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							" pm.environment.set(\"JWT\", pm.response.json().access_token);"
+							"pm.environment.get(\"JWT\",pm.response.json().access_token);"
 						],
 						"type": "text/javascript"
 					}
@@ -25,35 +25,24 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{JWT}}",
+							"value": "",
 							"type": "string"
 						}
 					]
 				},
 				"method": "POST",
-				"header": [
-					{
-						"key": "username",
-						"value": "demo1@gmail.com",
-						"type": "text"
-					},
-					{
-						"key": "password",
-						"value": "demo1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
 						{
 							"key": "username",
-							"value": "demo2@gmail.com",
+							"value": "demo1@gmail.com",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "demo2",
+							"value": "demo1",
 							"type": "text"
 						}
 					]
@@ -68,53 +57,32 @@
 			"response": []
 		},
 		{
-			"name": "/ Login 2",
+			"name": "/ Login2",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							" pm.environment.set(\"JWT\", pm.response.json().access_token); "
+							"pm.environment.get(\"JWT\",pm.response.json().access_token);"
 						],
 						"type": "text/javascript"
 					}
 				}
 			],
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{JWT}}",
-							"type": "string"
-						}
-					]
-				},
 				"method": "POST",
-				"header": [
-					{
-						"key": "username",
-						"value": "demo1@gmail.com",
-						"type": "text"
-					},
-					{
-						"key": "password",
-						"value": "demo1",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
 						{
 							"key": "username",
-							"value": "demo1@gmail.com",
+							"value": "demo2@gmail.com",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "demo1",
+							"value": "demo2",
 							"type": "text"
 						}
 					]

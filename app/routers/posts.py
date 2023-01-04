@@ -2,7 +2,7 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from typing import List
-from .. import models, schemas
+from .. import models, schemas, oauth2
 from .. database import get_db
 
 
@@ -18,7 +18,7 @@ router = APIRouter(
 # Path to get all Post stored in my_post variable
 # When making a request to all posts we return a list of posts
 @router.get("/", response_model=List[schemas.Post] )
-def get_posts(db: Session = Depends(get_db)):
+def get_posts(db: Session = Depends(get_db), get_current_user: str = Depends(oauth2.get_current_user)):
 
     # Retrieving all the post fon the databas thew ORM
     posts = db.query(models.Post).all()     
@@ -26,15 +26,13 @@ def get_posts(db: Session = Depends(get_db)):
 
 
 # Post request to create the posts
-# response_model=schemas.Post (defines the data that we will return to the user when making a request)
+# oauth2.get_current_user). Force the user to be loged
 @router.post("/", status_code = status.HTTP_201_CREATED, response_model=schemas.Post)
-def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db)):
+def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), get_current_user: str = Depends(oauth2.get_current_user)):
 
     # Quety to create a post
     # If the model is not to big we can use  this query to create nuw post
-    # print(post.dict())
-    new_post = models.Post(
-        title=post.title, content=post.content, published=post.published)
+    print(get_current_user.email)
      
     # If the model have many field we can use  this query to create nuw post
     new_post = models.Post(**post.dict())
@@ -47,7 +45,7 @@ def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db)):
 
 # Retrieving information from an individual post 
 @router.get("/{id}", response_model=schemas.Post)
-def  get_post(id: str, db: Session = Depends(get_db)):
+def  get_post(id: str, db: Session = Depends(get_db), get_current_user: str = Depends(oauth2.get_current_user)):
 
     # Retrieving all the post fon the databas thew ORM
     post = db.query(models.Post).filter(models.Post.id == id).first()
@@ -62,7 +60,7 @@ def  get_post(id: str, db: Session = Depends(get_db)):
 
 # Handler Delete Function
 @router.delete("/{id}", status_code = status.HTTP_404_NOT_FOUND)
-def delete_post(id: str, db: Session = Depends(get_db)):
+def delete_post(id: str, db: Session = Depends(get_db), get_current_user: str = Depends(oauth2.get_current_user)):
 
     post = db.query(models.Post).filter(models.Post.id == id)
 
@@ -78,7 +76,7 @@ def delete_post(id: str, db: Session = Depends(get_db)):
 
 # Handler Update Function
 @router.put("/{id}", response_model=schemas.Post)
-def update_post(id: str, updated_post: schemas.PostCreate, db: Session = Depends(get_db)):
+def update_post(id: str, updated_post: schemas.PostCreate, db: Session = Depends(get_db), get_current_user: str = Depends(oauth2.get_current_user)):
     
     post_query = db.query(models.Post).filter(models.Post.id == id)
 

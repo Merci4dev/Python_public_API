@@ -4,7 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Url which reference the database (for the connection). 
-SQLALCHEMY_DATABASE_URL = "postgresql://merci4dev:elnobato007@localhost/fastapi_prod"
+SQLALCHEMY_DATABASE_URL = "postgresql://userName:passwd@hostName/dbName"
+
 
 # The engine is responsable to connect the ORM(sqlalchemy) to postgres
 engine = create_engine(

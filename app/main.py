@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from . import models,schemas, utils
 from . database import engine,  get_db
 
-from .routers import posts, users
+from .routers import posts, users, auth
 
 
 # this line crate the table whe we run the code
@@ -26,7 +26,7 @@ app = FastAPI()
 # Handel the database connection hard coded
 while True:
     try:
-        conn = psycopg2.connect(host="hostName",database="dbName", user="userName", password="password", cursor_factory=RealDictCursor)
+        conn = psycopg2.connect(host="hostname",database="dbName", user="userName", password="passwd", cursor_factory=RealDictCursor)
         cur = conn.cursor()
         print("DB is connectd succesfully (·_·) ···")
         break
@@ -42,6 +42,7 @@ while True:
 # For the main file to have access to the users and postas components
 app.include_router(posts.router)
 app.include_router(users.router)
+app.include_router(auth.router)
 
 
 # Path to the api home
