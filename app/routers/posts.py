@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from .. import models, schemas, oauth2
 from .. database import get_db
+from sqlalchemy import func
 
 
 #Define a prefix to the routes
@@ -19,31 +20,29 @@ router = APIRouter(
 # [limit: int = 5  : set the limit of post to syplay
 # skip: int = 2 : skip the post number
 # search: Optional[str] = ""] : set the the option to look a specific post by the title 
-@router.get("/", response_model=List[schemas.Post] )
+@router.get("/", response_model=List[schemas.PostOut] )
+# @router.get("/" )
 def get_post(db: Session = Depends(get_db), current_user : int = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
 
-    # Logic to get only the posts corresponding to the logged  user
-    # posts = db.query(models.Post).filter(
-    #     models.Post.owner_id == current_user.id).all()
-
-     # Logic to retriev all the post fon the databas 
-    # posts = db.query(models.Post).all() 
-
-
-    # we use this query when the request return the post from the current user
-    # posts = db.query(models.Post).filter(
-    #     models.Post.owner_id == current_user.id, 
-    #     models.Post.title.contains(search)).limit(limit).offset(skip).all()
 
     # we use this query withow user limintation
     posts = db.query(models.Post).filter( 
         models.Post.title.contains(search)).limit(limit).offset(skip).all()
-    
+
+    # performing outher JOIN table wit sqlalchemy
+    results = db.query(
+        models.Post, func.count(models.Votes.post_id).label("votes")).join(
+        models.Votes, models.Votes.post_id ==  models.Post.id, isouter=True).group_by(models.Post.id).filter(
+        models.Post.owner_id == current_user.id, models.Post.title.contains(search)).limit(limit).offset(skip).all()
+
+    print(results)
 
     if not posts:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail=f"No posts founded!!")   
     
-    return posts
+    # return posts
+    return results
+
 
 
 # Post request to create the posts
@@ -65,11 +64,16 @@ def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db),current
 
 
 # Retrieving information from an individual post 
-@router.get("/{id}", response_model=schemas.Post)
+@router.get("/{id}", response_model=schemas.PostOut)
 def  get_post(id: str, db: Session = Depends(get_db), current_user: str = Depends(oauth2.get_current_user)):
 
     # Retrieving all the post fon the databas thew ORM
-    post = db.query(models.Post).filter(models.Post.id == id).first()
+    # post = db.query(models.Post).filter(models.Post.id == id).first()
+
+    # show the Votes when getting a single post
+    post = db.query(
+        models.Post, func.count(models.Votes.post_id).label("votes")).join(
+        models.Votes, models.Votes.post_id ==  models.Post.id, isouter=True).group_by(models.Post.id).filter(models.Post.id == id).first()
 
     # Adding validation status code response
     if not post:
