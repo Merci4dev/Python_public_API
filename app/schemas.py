@@ -14,10 +14,22 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
    pass
 
+   # Defining which data we send back to the user. With this we prevent the password from being returned
+class UserOuth(BaseModel):
+    id: UUID
+    email: EmailStr
+    created_at : datetime
+
+    class Config:
+        orm_mode = True
+        
+
 #This class handle the filed which must be send basck als response whe we make any request (inherits the fields from PostBase)
 class Post(PostBase):
     id: UUID
     created_at : datetime
+    owner_id: UUID
+    owner: UserOuth
 
     # Convierte el sqlalchemy model en python dict
     class Config:
@@ -28,16 +40,6 @@ class Post(PostBase):
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
-   
-
-# Defining which data we send back to the user. With this we prevent the password from being returned
-class UserOuth(BaseModel):
-    id: UUID
-    email: EmailStr
-    created_at : datetime
-
-    class Config:
-        orm_mode = True
 
 
 # Schema for the user Login

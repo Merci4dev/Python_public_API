@@ -18,7 +18,7 @@ SECRET_KEY = "secret_key"
 ALGORITHM = "HS256"
 
 # # # Espiration time
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 
 # Funtion to create the jwt access token

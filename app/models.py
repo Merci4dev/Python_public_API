@@ -1,7 +1,7 @@
 # each model represent a table in the database. Esto seria la estructura del un ORM
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
-
+from sqlalchemy.orm import relationship
 from uuid import uuid4
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
@@ -20,6 +20,11 @@ class Post(Base):
     published = Column(Boolean, server_default="TRUE",  nullable=False) 
     created_at = Column(TIMESTAMP(timezone=True), 
         nullable=False,  server_default=text('now()')) 
+    #   Create the column user_id for relationship between the tables
+    owner_id = Column(UUID(as_uuid=True), ForeignKey(
+    "users.id", ondelete="CASCADE"), nullable=False)
+    # Make the relation to show whow create the post. meke reference to the Users class. Create the owner property a  
+    owner = relationship("Users")
 
 
 # Model class for the users Table creation when running the application the table is created)
