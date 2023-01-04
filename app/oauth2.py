@@ -12,13 +12,13 @@ from .config import settings
 oauth2_schema = OAuth2PasswordBearer(tokenUrl = 'login')
 
 # # # Secret Key
-SECRET_KEY = "secret_key"
+SECRET_KEY = settings.secret_key
 
 # # # Algoritmo to use
-ALGORITHM = "HS256"
+ALGORITHM = settings.algorithm
 
 # # # Espiration time
-ACCESS_TOKEN_EXPIRE_MINUTES = 15
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
 
 
 # Funtion to create the jwt access token

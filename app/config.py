@@ -1,8 +1,8 @@
 
-# Setings for for the enviroment varibales
+# Setings for for the enviroment varibales whit pydantic
 from pydantic import BaseSettings
 
-# providing the variable env that we need to set
+# providing the variable that we need to set
 class Settings(BaseSettings):
     database_hostname : str
     database_port : str
@@ -13,8 +13,7 @@ class Settings(BaseSettings):
     algorithm: str
     access_token_expire_minutes: int
 
-
-    #impotando los valores del file .env
+    #import the variable from the .env file
     class Config:
         env_file = ".env"
 

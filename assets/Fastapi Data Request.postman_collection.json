@@ -31,7 +31,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{JWT}}",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjAyNDViNjYtM2Y3MS00NWQyLWIwMzEtODhmMTZmYjllZDJlIiwiZXhwIjoxNjcyODM4OTg2fQ.dC7K6pnpEnhLKcCJEVjbGh_YzdTQ4HfJegX2o5XTdso",
 							"type": "string"
 						}
 					]
@@ -48,6 +48,202 @@
 			"response": []
 		},
 		{
+			"name": "/ Get Litmited Posts",
+			"protocolProfileBehavior": {
+				"followAuthorizationHeader": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiM2Q3MDMwY2ItYWMwMC00NDQ2LTg5ZGQtNzFlMjllZWRjZTQ5IiwiZXhwIjoxNjcyODM5NDQ5fQ.zY6-2zM44wgnANIuoZkAfaduhaIHGxH9RPWphrWMlLw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}posts/?limit=5",
+					"host": [
+						"{{URL}}posts"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/ Set Many parms",
+			"protocolProfileBehavior": {
+				"followAuthorizationHeader": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiM2Q3MDMwY2ItYWMwMC00NDQ2LTg5ZGQtNzFlMjllZWRjZTQ5IiwiZXhwIjoxNjcyODM5NDQ5fQ.zY6-2zM44wgnANIuoZkAfaduhaIHGxH9RPWphrWMlLw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}posts/?limit=3&skip=1&search=One",
+					"host": [
+						"{{URL}}posts"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "3"
+						},
+						{
+							"key": "skip",
+							"value": "1"
+						},
+						{
+							"key": "search",
+							"value": "One"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/ Space in url",
+			"protocolProfileBehavior": {
+				"followAuthorizationHeader": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiM2Q3MDMwY2ItYWMwMC00NDQ2LTg5ZGQtNzFlMjllZWRjZTQ5IiwiZXhwIjoxNjcyODM5NDQ5fQ.zY6-2zM44wgnANIuoZkAfaduhaIHGxH9RPWphrWMlLw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}posts/?limit=3&skip=1&search=One%20one",
+					"host": [
+						"{{URL}}posts"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "3"
+						},
+						{
+							"key": "skip",
+							"value": "1"
+						},
+						{
+							"key": "search",
+							"value": "One%20one"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/ Skip Posts",
+			"protocolProfileBehavior": {
+				"followAuthorizationHeader": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiM2Q3MDMwY2ItYWMwMC00NDQ2LTg5ZGQtNzFlMjllZWRjZTQ5IiwiZXhwIjoxNjcyODM5NDQ5fQ.zY6-2zM44wgnANIuoZkAfaduhaIHGxH9RPWphrWMlLw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}posts/?skip=2",
+					"host": [
+						"{{URL}}posts"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "skip",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/ Search Posts",
+			"protocolProfileBehavior": {
+				"followAuthorizationHeader": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiM2Q3MDMwY2ItYWMwMC00NDQ2LTg5ZGQtNzFlMjllZWRjZTQ5IiwiZXhwIjoxNjcyODM5NDQ5fQ.zY6-2zM44wgnANIuoZkAfaduhaIHGxH9RPWphrWMlLw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}posts/?search=new",
+					"host": [
+						"{{URL}}posts"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "new"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/ Get One Post",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -58,7 +254,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{JWT}}",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiM2Q3MDMwY2ItYWMwMC00NDQ2LTg5ZGQtNzFlMjllZWRjZTQ5IiwiZXhwIjoxNjcyODMwOTIyfQ.TIaF10Cf8VEwWJC8dg9RFJsahrVuGS6e2ULks-_adyw",
 							"type": "string"
 						}
 					]
@@ -77,12 +273,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{URL}}posts/d15ed4ff-dcc5-4312-9ac1-663cb365ccc6",
+					"raw": "{{URL}}posts/a7939705-475d-4dbd-bdcb-b4062b77e85b",
 					"host": [
 						"{{URL}}posts"
 					],
 					"path": [
-						"d15ed4ff-dcc5-4312-9ac1-663cb365ccc6"
+						"a7939705-475d-4dbd-bdcb-b4062b77e85b"
 					]
 				}
 			},
@@ -96,7 +292,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{JWT}}",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjAyNDViNjYtM2Y3MS00NWQyLWIwMzEtODhmMTZmYjllZDJlIiwiZXhwIjoxNjcyODM4OTg2fQ.dC7K6pnpEnhLKcCJEVjbGh_YzdTQ4HfJegX2o5XTdso",
 							"type": "string"
 						}
 					]
@@ -112,7 +308,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Post One\",\n    \"content\": \"My python Api demo Posts\"\n}",
+					"raw": "{\n    \"title\": \"Post Four Ten 2\",\n    \"content\": \"My python Api demo Posts\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -136,7 +332,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{JWT}}",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYjAyNDViNjYtM2Y3MS00NWQyLWIwMzEtODhmMTZmYjllZDJlIiwiZXhwIjoxNjcyODMwNDI3fQ.3viQ4usRL-XhJCnhV7E00yIKldveXG_7y1EAArJL7jk",
 							"type": "string"
 						}
 					]
@@ -144,12 +340,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{URL}}posts/3559aecf-e89b-4bde-91f1-5a7551df7550",
+					"raw": "{{URL}}posts/f464810a-adee-40de-a927-437ee7d7ca29",
 					"host": [
 						"{{URL}}posts"
 					],
 					"path": [
-						"3559aecf-e89b-4bde-91f1-5a7551df7550"
+						"f464810a-adee-40de-a927-437ee7d7ca29"
 					]
 				}
 			},
@@ -163,7 +359,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{JWT}}",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOWEwMWJkMzktYmIwNC00NjNiLTgyZDItNjEyODQ5YmMzNWZkIiwiZXhwIjoxNjcyODI4MDU4fQ.bRWQLjZ3g-17BAmGE-oa4JzpP9Zk4vVCDBzkqXQbrik",
 							"type": "string"
 						}
 					]
@@ -172,7 +368,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \n    \"title\":\"Developer Update \",\n    \"content\":\"Developing my public API\"\n\n}\n",
+					"raw": "{\n    \n    \"title\":\"Post Update SEVEN \",\n    \"content\":\"Developing my public API\"\n\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -180,12 +376,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}posts/0cfde88e-d820-4192-9185-d73bcfcb357d",
+					"raw": "{{URL}}posts/e555bfbb-cbcd-4fbb-8577-45cf92b99e4a",
 					"host": [
 						"{{URL}}posts"
 					],
 					"path": [
-						"0cfde88e-d820-4192-9185-d73bcfcb357d"
+						"e555bfbb-cbcd-4fbb-8577-45cf92b99e4a"
 					]
 				}
 			},

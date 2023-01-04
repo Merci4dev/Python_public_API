@@ -25,7 +25,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "",
+							"value": "{{JWT}}",
 							"type": "string"
 						}
 					]
@@ -70,6 +70,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{JWT}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {

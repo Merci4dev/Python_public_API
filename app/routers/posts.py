@@ -1,7 +1,7 @@
 # POST COMPONENT
 from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from .. import models, schemas, oauth2
 from .. database import get_db
 
@@ -15,27 +15,31 @@ router = APIRouter(
 )
 
 
-# Path to get all Post stored in my_post variable
-# When making a request to all posts we return a list of posts
+## Getin all post with the sqlarchemy ORM
+# [limit: int = 5  : set the limit of post to syplay
+# skip: int = 2 : skip the post number
+# search: Optional[str] = ""] : set the the option to look a specific post by the title 
 @router.get("/", response_model=List[schemas.Post] )
-def get_posts(db: Session = Depends(get_db), current_user: str = Depends(oauth2.get_current_user)):
+def get_post(db: Session = Depends(get_db), current_user : int = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
 
     # Logic to get only the posts corresponding to the logged  user
     # posts = db.query(models.Post).filter(
     #     models.Post.owner_id == current_user.id).all()
 
+     # Logic to retriev all the post fon the databas 
+    # posts = db.query(models.Post).all() 
 
 
-    # y limitamos el numero de post que quermos mostrar por pabinacion. tambien lo implementamos el skip (para la paginacion). implemtamos el search params
-    # %20 (espacio en la url). Se usa para buscar query con espacios j
-   
-        # models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    # we use this query when the request return the post from the current user
+    # posts = db.query(models.Post).filter(
+    #     models.Post.owner_id == current_user.id, 
+    #     models.Post.title.contains(search)).limit(limit).offset(skip).all()
+
+    # we use this query withow user limintation
+    posts = db.query(models.Post).filter( 
+        models.Post.title.contains(search)).limit(limit).offset(skip).all()
     
 
-    # Logic to retriev all the post fon the databas 
-    posts = db.query(models.Post).all()  
-
-    
     if not posts:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail=f"No posts founded!!")   
     
