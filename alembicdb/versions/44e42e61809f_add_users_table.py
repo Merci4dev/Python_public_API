@@ -20,7 +20,6 @@ depends_on = None
 
 # Create the users table. PrimaryKeyConstraint create the primary_key. Other way
 def upgrade():
-    op.execute('CREATE EXTENSION "uuid-ossp";') 
     op.create_table("users",
         sa.Column("id", UUID(as_uuid=True),server_default=sa.text('uuid_generate_v4()'), nullable=False),
         sa.Column("email", sa.String(),nullable=False),
