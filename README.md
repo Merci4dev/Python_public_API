@@ -1,5 +1,9 @@
 # Public API built with python, postgresql, fastapi, SQLAlchemy alembic...
 
+# Location
+    This API is hosted in a ubuntu server
+
+
 # Instructions to run this API
     1 Create a virtual environment 
         virtualenv -p python3 env 
@@ -27,4 +31,5 @@
         http://localhost:8000/docs
 
 
-# Import the json files from assets to make test with posman  
+# Import the json files from assets to make test with posman
+    

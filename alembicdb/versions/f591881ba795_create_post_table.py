@@ -20,6 +20,7 @@ depends_on = None
 
 # This functin handle the logig to crate a table. 
 def upgrade():
+  op.execute('CREATE EXTENSION "uuid-ossp";') 
   op.create_table('posts', 
   sa.Column('id', UUID(as_uuid=True), nullable=False, server_default=sa.text('uuid_generate_v4()'), primary_key=True), 
   sa.Column('title', sa.String(), nullable=False))
