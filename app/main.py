@@ -4,8 +4,8 @@ from . import models
 from . database import engine
 from .routers import posts, users, auth, votes
 
-# this line crate the table whe we run the code
-models.Base.metadata.create_all(bind=engine)
+# when we user migration with alemabic this line is not necesary
+# models.Base.metadata.create_all(bind=engine)
 
 # Fastapi instantiation
 app = FastAPI()
