@@ -32,5 +32,5 @@ app.include_router(votes.router)
 # Path to retrieve the api home page
 @app.get("/")
 async def root():
-    return {"message": "Wellcome to my Ultimavive Python Api (·_·)"}
+    return {"message": "Wellcome to my Python Api ^·_·^"}
 
